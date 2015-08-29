@@ -24,7 +24,6 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.Vector;
 
-import cn.freedom.nano.config.Config;
 import cn.freedom.nano.control.IJsonController;
 import cn.freedom.nano.util.ILogger;
 
@@ -38,7 +37,7 @@ public class NanoHTTPD {
         printQueryParms(uri, method, header, parms, files);
 
         // action 请求 json等响应
-        if (AppControllerManager.getControl(uri) != null) {
+        if (NanoHttpManager.getControl(uri) != null) {
             return userControllerServ(uri, header, parms, myRootDir);
         }
         // 本地文件传输
@@ -89,6 +88,7 @@ public class NanoHTTPD {
      * Starts as a standalone file server and waits for Enter.
      */
     public static void main(String[] args) {
+        ILogger myOut = NanoHttpManager.getLogger(NanoHTTPD.class);
         myOut.println("NanoHTTPD 1.25 (C) 2001,2005-2011 Jarno Elonen and (C) 2010 Konstantinos Togias\n"
                 + "(Command line options: [-p port] [-d root-dir] [--licence])\n");
 
@@ -178,6 +178,12 @@ public class NanoHTTPD {
                 if (method == null) {
                     method = "GET";
                 }
+
+                if (!NanoHttpManager.canUseMethod(method)) {
+                    sendError(Response.HTTP_FORBIDDEN, "Method ");
+                    return;
+                }
+
                 String uri = pre.getProperty("uri");
                 System.out.println("url " + uri);
 
@@ -929,7 +935,7 @@ public class NanoHTTPD {
                         "FORBIDDEN: Won't serve ../ for security reasons.");
         }
 
-        IJsonController controller = AppControllerManager.getControl(uri);
+        IJsonController controller = NanoHttpManager.getControl(uri);
 
         if (res == null && controller == null) {
             res = new Response(Response.HTTP_NOTFOUND, Response.MIME_PLAINTEXT,
@@ -947,7 +953,7 @@ public class NanoHTTPD {
     private static int theBufferSize = 128 * 1024;
 
     // Change these if you want to log to somewhere else than stdout
-    protected static ILogger myOut = Config.getLogger();;
+    protected ILogger myOut = NanoHttpManager.getLogger(NanoHTTPD.class);
 
     /**
      * GMT date formatter

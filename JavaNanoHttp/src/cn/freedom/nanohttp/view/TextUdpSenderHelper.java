@@ -6,12 +6,13 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
-import cn.freedom.nano.config.Config;
+import cn.freedom.nano.core.DefaultLogger;
 import cn.freedom.nano.core.HttpServ;
 import cn.freedom.nano.util.ILogger;
+import cn.freedom.nanohttp.context.FreedomApplication;
 
 public class TextUdpSenderHelper {
-    private ILogger myOut = Config.getLogger();
+    private ILogger myOut = new DefaultLogger();
 
     /**
      * @param args
@@ -69,7 +70,7 @@ public class TextUdpSenderHelper {
     private String getMessage() {
         String ip = HttpServ.getLocalIpAddress();
         String serverHost = serv.getSerHost();
-        String macName = HttpServ.getMacName();
+        String macName = FreedomApplication.getMacName();
         return  macName + "@" + ip + "@" + serverHost;
     }
 

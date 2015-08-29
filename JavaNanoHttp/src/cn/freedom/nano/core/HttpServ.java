@@ -9,25 +9,13 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-import cn.freedom.nano.config.Config;
 import cn.freedom.nano.util.ILogger;
 
 public class HttpServ {
-    private ILogger logger = Config.getLogger();;
-    private static String macName;
+    private ILogger logger = NanoHttpManager.getLogger(HttpServ.class);;
 
-    public static String getMacName() {
-        return macName;
-    }
-
-    public static void setMacName(String macName) {
-        HttpServ.macName = macName;
-    }
-
-    public HttpServ(String macName, String wwwroot) {
-
+    public HttpServ(String wwwroot) {
         super();
-        HttpServ.macName = macName;
         this.wwwroot = new File(wwwroot);
     }
 
@@ -38,7 +26,7 @@ public class HttpServ {
 
     NanoHTTPD nanoHTTPD;
     int port = 50080;
-    File wwwroot = new File("/mnt/sdcard/apk");
+    File wwwroot = new File("/mnt/sdcard/wwwroot");
     String hostaddres;
     private String serHost;
 
@@ -68,7 +56,7 @@ public class HttpServ {
         String ip = getLocalIpAddress();
 
         serHost = "http://" + ip + ":" + port;
-        //AppControllerManager.serHost = serHost;
+        // AppControllerManager.serHost = serHost;
         return serHost;
     }
 
@@ -85,7 +73,8 @@ public class HttpServ {
                 Enumeration<InetAddress> enumIpAddr = niFace.getInetAddresses();
                 while (enumIpAddr.hasMoreElements()) {
                     InetAddress mInetAddress = enumIpAddr.nextElement();
-                    if (!mInetAddress.isLoopbackAddress() && isIPv4Address(mInetAddress.getHostAddress())) {
+                    if (!mInetAddress.isLoopbackAddress()
+                            && isIPv4Address(mInetAddress.getHostAddress())) {
                         System.out.println(mInetAddress.getHostAddress());
                         return mInetAddress.getHostAddress().toString();
                     }
@@ -104,7 +93,9 @@ public class HttpServ {
 
     public static boolean ipCheck(String text) {
         if (text != null && text.length() > 0) {
-            String regex = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\." + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\." + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+            String regex = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
+                    + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
+                    + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
                     + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
             if (text.matches(regex)) {
                 return true;

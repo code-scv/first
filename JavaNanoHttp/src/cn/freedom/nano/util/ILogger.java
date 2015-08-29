@@ -2,6 +2,8 @@
 package cn.freedom.nano.util;
 
 public interface ILogger {
+    
+    public abstract void setTag(String tag);
 
     public abstract void println(String... message);
 

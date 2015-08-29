@@ -1,12 +1,20 @@
 
-package cn.freedom.nanohttp;
+package cn.freedom.nano.core;
 
 import cn.freedom.nano.util.ILogger;
 
-public class TextLogger implements ILogger {
+public class DefaultLogger implements ILogger {
     private String TAG;
     private boolean isDebug = true;
     StringBuffer sb = new StringBuffer();
+
+    // private DefaultLogger(String TAG) {
+    // if (isDebug) {
+    // this.TAG = "ss_" + TAG;
+    // } else {
+    // this.TAG = TAG;
+    // }
+    // }
 
     public void println(String... message) {
         sb.setLength(0);
@@ -37,10 +45,7 @@ public class TextLogger implements ILogger {
 
     @Override
     public void setTag(String tag) {
-        if (isDebug) {
-            this.TAG = "ss_" + tag;
-        } else {
-            this.TAG = tag;
-        }
+        this.TAG = tag;
+
     }
 }

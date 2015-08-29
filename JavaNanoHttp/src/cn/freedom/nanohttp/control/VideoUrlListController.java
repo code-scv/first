@@ -11,7 +11,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import cn.freedom.nano.control.BaseJsonController;
-import cn.freedom.nano.core.HttpServ;
+import cn.freedom.nanohttp.context.FreedomApplication;
 
 @SuppressWarnings("deprecation")
 public class VideoUrlListController extends BaseJsonController {
@@ -29,7 +29,7 @@ public class VideoUrlListController extends BaseJsonController {
         long start = System.currentTimeMillis();
         try {
             result.append("\"code\":").append(1).append(",");
-            result.append("\"macName\":").append("\"").append(HttpServ.getMacName()).append("\"").append(",");
+            result.append("\"macName\":").append("\"").append(FreedomApplication.getMacName()).append("\"").append(",");
             result.append("\"medias\":").append("[");
             boolean isNotFirst = false;
             for (File media : medias) {

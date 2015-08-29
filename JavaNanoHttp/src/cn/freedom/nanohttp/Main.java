@@ -18,10 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import cn.freedom.nano.config.Config;
-import cn.freedom.nano.core.AppControllerManager;
 import cn.freedom.nano.core.HttpServ;
-import cn.freedom.nanohttp.context.FreedomApplication;
+import cn.freedom.nano.core.NanoHttpManager;
+import cn.freedom.nano.core.NanoHttpManager.HttpMethod;
 import cn.freedom.nanohttp.control.VideoUrlListController;
 import cn.freedom.nanohttp.view.TextUdpSenderHelper;
 
@@ -29,7 +28,6 @@ public class Main {
 
     private static JTextField textField;
     private static LayoutManager layoutmanager = new FlowLayout();
-
 
     public static void main(String[] args) {
         MFrame frame = new MFrame();
@@ -101,11 +99,12 @@ class MFrame extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
 
-        Config.setLogger(TextLogger.getLogger(Main.class));
-        
-        AppControllerManager.adduserControl(new VideoUrlListController());
-        
-        httpServ = new HttpServ(FreedomApplication.getMacName(),"/home/kenny/code_path");
+        NanoHttpManager.setLoggerClass(TextLogger.class);
+        NanoHttpManager.configMethodType(HttpMethod.GET);
+        NanoHttpManager.configMappingFileType("mp4");
+        NanoHttpManager.adduserControl(new VideoUrlListController());
+
+        httpServ = new HttpServ("/home/kenny/code_path");
         String myService = httpServ.startServer();
         System.out.println("myService " + myService);// TODO Auto-generated
                                                      // method stub);
